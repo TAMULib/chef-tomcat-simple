@@ -1,3 +1,14 @@
-default['tomcat']['dir'] = 'apache-tomcat-7.0.47'
-default['tomcat']['source_url'] = 'http://apache.osuosl.org/tomcat/tomcat-7/v7.0.47/bin/'
-default['tomcat']['port'] = '80'
+default['tomcat']['version'] = '7.0.47'
+default['tomcat']['source_url'] = 'http://aptcache.l/files/tomcat/'
+default['tomcat']['source_prefix'] = 'apache-tomcat-'
+default['tomcat']['source_postfix'] = '.tar.gz'
+default['tomcat']['source_checksum'] = 'efbae77efad579b655ae175754cad3df'
+default['tomcat']['extract'] = 'zx'
+default['tomcat']['port'] = 9000 
+default['tomcat']['uid'] = 91
+default['tomcat']['gid'] = 91
+default['tomcat']['user'] = 'tomcat'
+default['tomcat']['group'] = 'tomcat'
+default['tomcat']['home'] = '/data/tomcat'
+default['tomcat']['binhome'] = '/opt/tomcat'
+default['tomcat']['shell'] = '/sbin/nologin'

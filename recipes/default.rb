@@ -7,28 +7,88 @@
 # All rights reserved - Do Not Redistribute
 #
 
-directory "/data" do
-  owner "root"
-  group "root"
+tomcat = node['tomcat']
+src = "#{tomcat['source_prefix']}#{tomcat['version']}#{tomcat['source_postfix']}"
+extract = "#{tomcat['binhome']}/#{tomcat['source_prefix']}#{tomcat['version']}"
+
+directory '/data' do
+  owner 'root'
+  group 'root'
   mode 0755
-  action :create
 end
 
-tarball = "apache-tomcat-7.0.47.tar.gz"
-
-remote_file "/tmp/#{tarball}" do
-  source "http://apache.osuosl.org/tomcat/tomcat-7/v7.0.47/bin/#{tarball}"
-  mode "0644"
-  checksum "efbae77efad579b655ae175754cad3df"
+group tomcat['group'] do
+  system true
+  gid tomcat['gid']
 end
 
-execute "tar tomcat" do
-  user "root"
-  group "root"
+user tomcat['user'] do
+  comment 'Apache Tomcat'
+  gid tomcat['gid']
+  home tomcat['home']
+  shell '/sbin/nologin'
+  supports :manage_home => true
+  system true
+  uid tomcat['uid']
+end
 
-  installation_dir = "/data"
-  cwd installation_dir
-  command "tar -xzvf /data/#{tarball}"
-  creates installation_dir + "/tomcat"
-  action :run
+
+remote_file "/tmp/#{src}" do
+  source "#{tomcat['source_url']}#{src}" 
+  mode 0644
+  checksum tomcat['source_checksum']
+end
+
+directory tomcat['binhome'] do
+  user tomcat['user']
+  group tomcat['group']
+  mode 0755
+end
+
+execute "extract-tomcat" do
+  user "tomcat"
+  group "tomcat"
+  command "tar -C #{tomcat['binhome']} -#{tomcat['extract']} -f /tmp/#{src}"
+  creates extract
+end
+
+link "#{tomcat['binhome']}/current" do
+  owner tomcat['user']
+  group tomcat['group']
+  to extract
+end
+
+%w(conf logs temp webapps work).each do |dir|
+  link "#{tomcat['home']}/#{dir}" do
+    owner tomcat['user']
+    group tomcat['group']
+    to "#{tomcat['binhome']}/current/#{dir}"
+  end
+end
+
+template '/etc/init.d/tomcat' do
+  source 'tomcat.erb'
+  owner 'root'
+  group 'root'
+  mode 0755
+  variables(
+    :binhome => tomcat['binhome'],
+    :tomcat_user => tomcat['user'],
+  )
+end
+
+service 'tomcat' do 
+  action [:start, :enable]
+  supports :restart => true, :status => true
+end
+
+template "#{tomcat['home']}/conf/server.xml" do
+  source "server.xml.erb"
+  owner tomcat['user']
+  group tomcat['group']
+  mode 0644
+  variables(
+    :port => tomcat['port'],
+  )
+  notifies :restart, 'service[tomcat]', :delayed
 end
