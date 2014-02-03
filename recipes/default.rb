@@ -52,6 +52,13 @@ execute "extract-tomcat" do
   creates extract
 end
 
+%w(docs examples host-manager manager ROOT).each do |dir|
+  directory "#{tomcat['binhome']}/current/webapps/#{dir}" do
+    recursive true
+    action :delete
+  end
+end
+
 link "#{tomcat['binhome']}/current" do
   owner tomcat['user']
   group tomcat['group']
@@ -78,11 +85,13 @@ template '/etc/init.d/tomcat' do
 end
 
 service 'tomcat' do 
+  only_if { not node['tomcat']['disabled'] }
   action [:start, :enable]
   supports :restart => true, :status => true
 end
 
 template "#{tomcat['home']}/conf/server.xml" do
+  only_if { not node['tomcat']['disabled'] }
   source "server.xml.erb"
   owner tomcat['user']
   group tomcat['group']

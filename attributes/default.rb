@@ -12,3 +12,4 @@ default['tomcat']['group'] = 'tomcat'
 default['tomcat']['home'] = '/data/tomcat'
 default['tomcat']['binhome'] = '/opt/tomcat'
 default['tomcat']['shell'] = '/sbin/nologin'
+default['tomcat']['disabled'] = false
