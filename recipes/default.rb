@@ -52,17 +52,17 @@ execute "extract-tomcat" do
   creates extract
 end
 
+link "#{tomcat['binhome']}/current" do
+  owner tomcat['user']
+  group tomcat['group']
+  to extract
+end
+
 %w(docs examples host-manager manager ROOT).each do |dir|
   directory "#{tomcat['binhome']}/current/webapps/#{dir}" do
     recursive true
     action :delete
   end
-end
-
-link "#{tomcat['binhome']}/current" do
-  owner tomcat['user']
-  group tomcat['group']
-  to extract
 end
 
 %w(conf logs temp webapps work).each do |dir|
