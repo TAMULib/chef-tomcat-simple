@@ -58,13 +58,6 @@ link "#{tomcat['binhome']}/current" do
   to extract
 end
 
-%w(docs examples host-manager manager ROOT).each do |dir|
-  directory "#{tomcat['binhome']}/current/webapps/#{dir}" do
-    recursive true
-    action :delete
-  end
-end
-
 %w(conf logs temp webapps work).each do |dir|
   link "#{tomcat['home']}/#{dir}" do
     owner tomcat['user']
