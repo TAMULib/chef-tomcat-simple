@@ -66,6 +66,16 @@ end
   end
 end
 
+template "#{tomcat['binhome']}/current/bin/setenv.sh" do
+  source 'setenv.sh.erb'
+  owner 'root'
+  group 'root'
+  mode 0755
+  variables(
+    
+  )
+end
+
 template '/etc/init.d/tomcat' do
   source 'tomcat.erb'
   owner 'root'
@@ -92,7 +102,7 @@ template "#{tomcat['home']}/conf/server.xml" do
   group tomcat['group']
   mode 0644
   variables(
-    :port => tomcat['port'],
+    :port => tomcat['port']
   )
   notifies :restart, 'service[tomcat]', :delayed
 end
