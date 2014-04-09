@@ -66,6 +66,16 @@ end
   end
 end
 
+template '/bin/setenv.sh' do
+  source 'setenv.sh.erb'
+  owner 'root'
+  group 'root'
+  mode 0755
+  variables(
+    
+  )
+end
+
 template '/etc/init.d/tomcat' do
   source 'tomcat.erb'
   owner 'root'
