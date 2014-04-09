@@ -26,7 +26,7 @@ SU="su -s /bin/bash"
 
 start()
 {
-  $SU $TOMCAT_USER -c $TOMCAT_START
+  $SU $TOMCAT_USER -c $TOMCAT_START -Xms128m -Xmx2048m
 }
 
 stop()

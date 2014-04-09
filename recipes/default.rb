@@ -73,7 +73,7 @@ template '/etc/init.d/tomcat' do
   mode 0755
   variables(
     :binhome => tomcat['binhome'],
-    :tomcat_user => tomcat['user'],
+    :tomcat_user => tomcat['user']
   )
 end
 
@@ -90,7 +90,7 @@ template "#{tomcat['home']}/conf/server.xml" do
   group tomcat['group']
   mode 0644
   variables(
-    :port => tomcat['port'],
+    :port => tomcat['port']
   )
   notifies :restart, 'service[tomcat]', :delayed
 end
