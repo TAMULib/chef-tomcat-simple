@@ -74,6 +74,8 @@ template '/etc/init.d/tomcat' do
   variables(
     :binhome => tomcat['binhome'],
     :tomcat_user => tomcat['user'],
+    :x => tomcat['X'],
+    :xx => tomcat['XX'],
   )
 end
 

@@ -18,6 +18,10 @@
 export CATALINA_HOME=<%=@binhome%>/current
 export CATALINA_PID=<%=@binhome-%>/current/tomcat.pid
 
+export CATALINA_OPTS='<%=@x.map{|k,v| '-X'+k+v+' '}.join + @xx.map{|k,v| '-XX:'+k+'='+v+' '}.join-%>'
+
+#export CATALINA_OPTS='-Xms1g -Xmx8g -XX:MaxPermSize=256m'
+
 TOMCAT_USER=<%=@tomcat_user%>
 TOMCAT_START=<%=@binhome-%>/current/bin/startup.sh
 TOMCAT_STOP=<%=@binhome-%>/current/bin/shutdown.sh
@@ -31,7 +35,7 @@ start()
 
 stop()
 {
-  $SU $TOMCAT_USER -c $TOMCAT_STOP
+  $SU $TOMCAT_USER -c $TOMCAT_STOP 30
 }
 
 status()

@@ -13,3 +13,6 @@ default['tomcat']['home'] = '/data/tomcat'
 default['tomcat']['binhome'] = '/opt/tomcat'
 default['tomcat']['shell'] = '/sbin/nologin'
 default['tomcat']['disabled'] = false
+default['tomcat']['X']['ms'] = '1g'
+default['tomcat']['X']['mx'] = '2g'
+default['tomcat']['XX']['MaxPermSize'] = '256m'
