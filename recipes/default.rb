@@ -66,6 +66,13 @@ end
   end
 end
 
+file "/bin/setenv.sh" do
+  owner "root"
+  group "root"
+  mode "0755"
+  action :create
+end
+
 template '/bin/setenv.sh' do
   source 'setenv.sh.erb'
   owner 'root'
