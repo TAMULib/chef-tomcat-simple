@@ -66,16 +66,6 @@ end
   end
 end
 
-template "#{tomcat['binhome']}/current/bin/setenv.sh" do
-  source 'setenv.sh.erb'
-  owner 'root'
-  group 'root'
-  mode 0755
-  variables(
-    
-  )
-end
-
 template '/etc/init.d/tomcat' do
   source 'tomcat.erb'
   owner 'root'
@@ -85,7 +75,7 @@ template '/etc/init.d/tomcat' do
     :binhome => tomcat['binhome'],
     :tomcat_user => tomcat['user'],
     :x => tomcat['X'],
-    :xx => tomcat['XX'],
+    :xx => tomcat['XX']
   )
 end
 
