@@ -18,7 +18,7 @@
 export CATALINA_HOME=<%=@binhome%>/current
 export CATALINA_PID=<%=@binhome-%>/current/tomcat.pid
 
-export CATALINA_OPTS='<%=@x.map{|k,v| '-X'+k+v+' '}.join + @xx.map{|k,v| '-XX:'+k+'='+v+' '}.join-%>'
+export JAVA_OPTS='<%=@x.map{|k,v| '-X'+k+v+' '}.join + @xx.map{|k,v| '-XX:'+k+'='+v+' '}.join-%>'
 
 #export CATALINA_OPTS='-Xms1g -Xmx8g -XX:MaxPermSize=256m'
 
