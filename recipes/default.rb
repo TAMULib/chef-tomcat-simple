@@ -7,9 +7,20 @@
 # All rights reserved - Do Not Redistribute
 #
 
+include_recipe 'java'
+include_recipe 'ark'
+
 tomcat = node['tomcat']
-src = "#{tomcat['source_prefix']}#{tomcat['version']}#{tomcat['source_postfix']}"
-extract = "#{tomcat['binhome']}/#{tomcat['source_prefix']}#{tomcat['version']}"
+
+url_prefix = 
+  'tomcat-' + tomcat['version'].split('.')[0] + '/v' + tomcat['version'] + '/bin/'
+tomcat_tar = tomcat['source_prefix'] + tomcat['version'] + tomcat['source_postfix']
+
+src = URI.join(tomcat['url_base'], url_prefix, tomcat_tar).to_s
+
+dest = File.join(tomcat['bin_prefix'], 'tomcat')
+
+log src
 
 directory '/data' do
   owner 'root'
@@ -32,37 +43,20 @@ user tomcat['user'] do
   uid tomcat['uid']
 end
 
-
-remote_file "/tmp/#{src}" do
-  source "#{tomcat['source_url']}#{src}" 
-  mode 0644
-  checksum tomcat['source_checksum']
-end
-
-directory tomcat['binhome'] do
-  user tomcat['user']
-  group tomcat['group']
-  mode 0755
-end
-
-execute "extract-tomcat" do
-  user "tomcat"
-  group "tomcat"
-  command "tar -C #{tomcat['binhome']} -#{tomcat['extract']} -f /tmp/#{src}"
-  creates extract
-end
-
-link "#{tomcat['binhome']}/current" do
+ark 'tomcat' do
+  url src
+  version tomcat['version']
+  path tomcat['bin_prefix']
   owner tomcat['user']
   group tomcat['group']
-  to extract
+  action :put
 end
 
 %w(conf logs temp webapps work).each do |dir|
   link "#{tomcat['home']}/#{dir}" do
     owner tomcat['user']
     group tomcat['group']
-    to "#{tomcat['binhome']}/current/#{dir}"
+    to File.join(dest, dir)
   end
 end
 
@@ -72,7 +66,7 @@ template '/etc/init.d/tomcat' do
   group 'root'
   mode 0755
   variables(
-    :binhome => tomcat['binhome'],
+    :binhome => File.join(tomcat['bin_prefix'], 'tomcat'),
     :tomcat_user => tomcat['user'],
     :x => tomcat['X'],
     :xx => tomcat['XX']

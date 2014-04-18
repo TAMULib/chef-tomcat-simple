@@ -15,16 +15,16 @@
 ### END INIT INFO
 
 
-export CATALINA_HOME=<%=@binhome%>/current
-export CATALINA_PID=<%=@binhome-%>/current/tomcat.pid
+export CATALINA_HOME=<%=@binhome%>
+export CATALINA_PID=<%=@binhome-%>/tomcat.pid
 
 export JAVA_OPTS='<%=@x.map{|k,v| '-X'+k+v+' '}.join + @xx.map{|k,v| '-XX:'+k+'='+v+' '}.join-%>'
 
 #export CATALINA_OPTS='-Xms1g -Xmx8g -XX:MaxPermSize=256m'
 
 TOMCAT_USER=<%=@tomcat_user%>
-TOMCAT_START=<%=@binhome-%>/current/bin/startup.sh
-TOMCAT_STOP=<%=@binhome-%>/current/bin/shutdown.sh
+TOMCAT_START=<%=@binhome-%>/bin/startup.sh
+TOMCAT_STOP=<%=@binhome-%>/bin/shutdown.sh
 
 SU="su -s /bin/bash"
 
