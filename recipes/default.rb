@@ -12,9 +12,9 @@ include_recipe 'ark'
 
 tomcat = node['tomcat']
 
-url_prefix = 
-  'tomcat-' + tomcat['version'].split('.')[0] + '/v' + tomcat['version'] + '/bin/'
-tomcat_tar = tomcat['source_prefix'] + tomcat['version'] + tomcat['source_postfix']
+url_prefix = 'tomcat-' + tomcat['version'].split('.')[0] + '/v' + 
+  tomcat['version'] + '/bin/'
+tomcat_tar = 'apache-tomcat-' + tomcat['version'] + '.tar.gz'
 
 src = URI.join(tomcat['url_base'], url_prefix, tomcat_tar).to_s
 
@@ -73,12 +73,6 @@ template '/etc/init.d/tomcat' do
   )
 end
 
-service 'tomcat' do 
-  only_if { not node['tomcat']['disabled'] }
-  action [:start, :enable]
-  supports :restart => true, :status => true
-end
-
 template "#{tomcat['home']}/conf/server.xml" do
   only_if { not node['tomcat']['disabled'] }
   source "server.xml.erb"
@@ -88,5 +82,12 @@ template "#{tomcat['home']}/conf/server.xml" do
   variables(
     :port => tomcat['port']
   )
-  notifies :restart, 'service[tomcat]', :delayed
 end
+
+service 'tomcat' do 
+  only_if { not node['tomcat']['disabled'] }
+  action [:start, :enable]
+  supports :restart => true, :status => true
+  subscribes :restart, "template[#{tomcat['home']}/conf/server.xml]", :delayed
+end
+

@@ -1,7 +1,5 @@
 default['tomcat']['version'] = '7.0.47'
 default['tomcat']['url_base'] = 'http://archive.apache.org/dist/tomcat/'
-default['tomcat']['source_prefix'] = 'apache-tomcat-'
-default['tomcat']['source_postfix'] = '.tar.gz'
 default['tomcat']['port'] = 9000 
 default['tomcat']['uid'] = 91
 default['tomcat']['gid'] = 91
