@@ -84,10 +84,16 @@ template "#{tomcat['home']}/conf/server.xml" do
   )
 end
 
+execute 'wait for tomcat' do
+  command 'sleep 5'
+  action :nothing
+end
+
 service 'tomcat' do 
   only_if { not node['tomcat']['disabled'] }
   action [:start, :enable]
   supports :restart => true, :status => true
+  notifies :run, 'execute[wait for tomcat]', :immediately
   subscribes :restart, "template[#{tomcat['home']}/conf/server.xml]", :delayed
 end
 
