@@ -90,7 +90,7 @@ execute 'wait for tomcat' do
 end
 
 service 'tomcat' do 
-  only_if { not node['tomcat']['disabled'] }
+  only_if { not node['tomcat']['disabled'] and not node['tomcat']['service_disabled'] }
   action [:start, :enable]
   supports :restart => true, :status => true
   notifies :run, 'execute[wait for tomcat]', :immediately
