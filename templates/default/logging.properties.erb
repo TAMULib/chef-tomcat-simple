@@ -1,4 +1,4 @@
-handlers = 1catalina.java.util.logging.FileHandler, java.util.logging.ConsoleHandler
+handlers = 1catalina.java.util.logging.FileHandler, 2localhost.java.util.logging.FileHandler, java.util.logging.ConsoleHandler
  
 .handlers = 1catalina.java.util.logging.FileHandler, java.util.logging.ConsoleHandler
  
@@ -8,5 +8,14 @@ handlers = 1catalina.java.util.logging.FileHandler, java.util.logging.ConsoleHan
 1catalina.java.util.logging.FileHandler.count = <%=@log['daily_count'] %> 
 1catalina.java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter
 
+2localhost.java.util.logging.FileHandler.level = <%=@log['daily_level'] %> 
+2localhost.java.util.logging.FileHandler.pattern = ${catalina.base}/logs/localhost.%g.log 
+2localhost.java.util.logging.FileHandler.limit = <%=@log['daily_limit'] %>
+2localhost.java.util.logging.FileHandler.count = <%=@log['daily_count'] %> 
+2localhost.java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter
+
 java.util.logging.ConsoleHandler.level = <%=@log['catalina_level'] %>
 java.util.logging.ConsoleHandler.formatter = java.util.logging.SimpleFormatter
+
+org.apache.catalina.core.ContainerBase.[Catalina].[localhost].level = <%=@log['containerBase_level'] %>
+org.apache.catalina.core.ContainerBase.[Catalina].[localhost].handlers = 2localhost.java.util.logging.FileHandler
