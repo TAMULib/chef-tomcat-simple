@@ -85,13 +85,30 @@ template "#{tomcat['home']}/conf/server.xml" do
 end
 
 template "#{tomcat['home']}/conf/logging.properties" do
+  only_if { not node['tomcat']['disabled'] }
   source "logging.properties.erb"
   owner tomcat['user']
   group tomcat['group']
   mode 0644
   variables(
-    :log => tomcat['log'],
-    :date => Time.now.strftime("%Y-%m-%d")
+    :log => tomcat['log']
+  )
+end
+
+directory "/etc/logrotate.d" do
+  owner tomcat['user']
+  group tomcat['group']
+  mode 0755
+end
+
+template "/etc/logrotate.d/tomcat" do
+  only_if { not node['tomcat']['disabled'] }
+  source "log-rotate.erb"
+  owner tomcat['user']
+  group tomcat['group']
+  mode 0644
+  variables(
+    :log => tomcat['log']
   )
 end
 
