@@ -104,12 +104,20 @@ end
 template "/etc/logrotate.d/tomcat" do
   only_if { not node['tomcat']['disabled'] }
   source "log-rotate.erb"
-  owner tomcat['user']
-  group tomcat['group']
+  owner 'root'
+  group 'root'
   mode 0644
   variables(
     :log => tomcat['log']
   )
+end
+
+cron 'daily-logrotate' do
+  only_if { not node['tomcat']['disabled'] }
+  user 'root'
+  hour '0'
+  minute '5'
+  command 'logrotate -f /etc/logrotate.conf'
 end
 
 execute 'wait for tomcat' do
