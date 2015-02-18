@@ -1,22 +1,4 @@
-/opt/tomcat/logs/catalina.out {
- copytruncate
- daily
- rotate <%=@log['daily_count'] %>
- compress
- missingok
- size <%=@log['catalina_size'] %>
-}
-
-/opt/tomcat/logs/catalina.log {
- copytruncate
- daily
- rotate <%=@log['daily_count'] %>
- compress
- missingok
- size <%=@log['catalina_size'] %>
-}
-
-/opt/tomcat/logs/localhost.log {
+/opt/tomcat/logs/catalina.out /opt/tomcat/logs/*.log {
  copytruncate
  daily
  rotate <%=@log['daily_count'] %>
