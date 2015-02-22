@@ -117,7 +117,7 @@ cron 'daily-logrotate' do
   user 'root'
   hour '0'
   minute '5'
-  command 'logrotate -f /etc/logrotate.conf'
+  command '/usr/sbin/logrotate -f /etc/logrotate.conf'
 end
 
 execute 'wait for tomcat' do
