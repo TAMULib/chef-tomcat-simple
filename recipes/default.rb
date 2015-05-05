@@ -37,7 +37,6 @@ user tomcat['user'] do
   comment 'Apache Tomcat'
   gid tomcat['gid']
   home tomcat['home']
-  shell '/sbin/nologin'
   supports :manage_home => true
   system true
   uid tomcat['uid']
