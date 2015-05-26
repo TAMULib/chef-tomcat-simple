@@ -83,6 +83,17 @@ template "#{tomcat['home']}/conf/server.xml" do
   )
 end
 
+template "#{tomcat['home']}/conf/context.xml" do
+  only_if { not node['tomcat']['disabled'] }
+  source "context.xml.erb"
+  owner tomcat['user']
+  group tomcat['group']
+  mode 0644
+  variables(
+    :linking => tomcat['linking']
+  )
+end
+
 template "#{tomcat['home']}/conf/logging.properties" do
   only_if { not node['tomcat']['disabled'] }
   source "logging.properties.erb"
