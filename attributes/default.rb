@@ -14,6 +14,8 @@ default['tomcat']['X']['mx'] = '2g'
 default['tomcat']['XX']['MaxPermSize'] = '256m'
 default['tomcat']['linking'] = false
   
+default['tomcat']['server']
+  
 default['tomcat']['log']['catalina_level'] = 'FINE'
 default['tomcat']['log']['catalina_size'] = '5M'
 default['tomcat']['log']['daily_level'] = 'FINE'

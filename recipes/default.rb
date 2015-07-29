@@ -79,7 +79,8 @@ template "#{tomcat['home']}/conf/server.xml" do
   group tomcat['group']
   mode 0644
   variables(
-    :port => tomcat['port']
+    :port => tomcat['port'],
+    :server => tomcat['server']
   )
 end
 
