@@ -51,6 +51,18 @@ ark 'tomcat' do
   action :put
 end
 
+directory File.join(dest, tomcat['cache']['dir']) do
+  only_if { node['tomcat']['cache']['mount'] }
+    action :delete
+end
+
+link File.join(dest, tomcat['cache']['dir']) do
+  only_if { node['tomcat']['cache']['mount'] }
+    owner tomcat['user']
+    group tomcat['group']
+    to node['tomcat']['cache']['mount']
+end
+
 %w(conf logs temp webapps work).each do |dir|
   link "#{tomcat['home']}/#{dir}" do
     owner tomcat['user']

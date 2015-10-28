@@ -22,3 +22,5 @@ default['tomcat']['log']['daily_level'] = 'FINE'
 default['tomcat']['log']['daily_limit'] = '2000000'
 default['tomcat']['log']['daily_count'] = '5'
 default['tomcat']['log']['containerBase_level'] = 'INFO'
+  
+default['tomcat']['cache']['dir'] = 'work'
