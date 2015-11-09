@@ -53,6 +53,7 @@ end
 
 directory File.join(dest, tomcat['cache']['dir']) do
   only_if { node['tomcat']['cache']['mount'] }
+    recursive true
     action :delete
 end
 
