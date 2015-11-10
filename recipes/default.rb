@@ -9,6 +9,7 @@
 
 include_recipe 'java'
 include_recipe 'ark'
+include_recipe 'lib-task::logrotate'
 
 tomcat = node['tomcat']
 
@@ -116,31 +117,6 @@ template "#{tomcat['home']}/conf/logging.properties" do
   variables(
     :log => tomcat['log']
   )
-end
-
-directory "/etc/logrotate.d" do
-  owner tomcat['user']
-  group tomcat['group']
-  mode 0755
-end
-
-template "/etc/logrotate.d/tomcat" do
-  only_if { not node['tomcat']['disabled'] }
-  source "log-rotate.erb"
-  owner 'root'
-  group 'root'
-  mode 0644
-  variables(
-    :log => tomcat['log']
-  )
-end
-
-cron 'daily-logrotate' do
-  only_if { not node['tomcat']['disabled'] }
-  user 'root'
-  hour '0'
-  minute '5'
-  command '/usr/sbin/logrotate -f /etc/logrotate.conf'
 end
 
 execute 'wait for tomcat' do
