@@ -17,10 +17,10 @@ default['tomcat']['linking'] = false
 default['tomcat']['server']
   
 default['tomcat']['log']['catalina_level'] = 'FINE'
-default['tomcat']['log']['catalina_size'] = '5M'
 default['tomcat']['log']['daily_level'] = 'FINE'
-default['tomcat']['log']['daily_limit'] = '2000000'
-default['tomcat']['log']['daily_count'] = '5'
 default['tomcat']['log']['containerBase_level'] = 'INFO'
   
 default['tomcat']['cache']['dir'] = 'work'
+
+default['lib-task']['log']['locations'] = ['/opt/tomcat/logs/catalina.out', '/opt/tomcat/logs/*.log']
+
