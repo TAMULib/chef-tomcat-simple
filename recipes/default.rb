@@ -56,6 +56,7 @@ directory File.join(dest, tomcat['cache']['dir']) do
   only_if { node['tomcat']['cache']['mount'] }
     recursive true
     action :delete
+  not_if { File.symlink?(File.join(dest, tomcat['cache']['dir'])) }
 end
 
 link File.join(dest, tomcat['cache']['dir']) do
