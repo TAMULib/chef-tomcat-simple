@@ -7,21 +7,36 @@
 # All rights reserved - Do Not Redistribute
 #
 
+::Chef::Recipe.send(:include, LibTask::Helper)
+
 include_recipe 'java'
 include_recipe 'ark'
 include_recipe 'lib-task::logrotate'
 
+java = node['java']
 tomcat = node['tomcat']
 
 url_prefix = 'tomcat-' + tomcat['version'].split('.')[0] + '/v' + 
   tomcat['version'] + '/bin/'
 tomcat_tar = 'apache-tomcat-' + tomcat['version'] + '.tar.gz'
-
+  
+# Check Tomcat Distribution
+if !(status_ok? URI.join(tomcat['url_base'], url_prefix, tomcat_tar).to_s)
+  node.override['tomcat']['url_base'] = "#{node['tomcat']['dist']['alt_uri']}tomcat/"
+end
+  
 src = URI.join(tomcat['url_base'], url_prefix, tomcat_tar).to_s
 
 dest = File.join(tomcat['bin_prefix'], 'tomcat')
 
 log src
+
+ruby_block "set-init" do
+  block do
+    node.default['tomcat']['init'] = true
+  end
+  action :nothing
+end
 
 directory '/data' do
   owner 'root'
@@ -50,6 +65,8 @@ ark 'tomcat' do
   owner tomcat['user']
   group tomcat['group']
   action :put
+  retries 3
+  notifies :run, "ruby_block[set-init]", :immediately
 end
 
 directory File.join(dest, tomcat['cache']['dir']) do
@@ -80,8 +97,9 @@ template '/etc/init.d/tomcat' do
   group 'root'
   mode 0755
   variables(
-    :binhome => File.join(tomcat['bin_prefix'], 'tomcat'),
+    :java_home => java['java_home'],
     :tomcat_user => tomcat['user'],
+    :tomcat_home => dest,
     :x => tomcat['X'],
     :xx => tomcat['XX']
   )
@@ -121,16 +139,21 @@ template "#{tomcat['home']}/conf/logging.properties" do
   )
 end
 
-execute 'wait for tomcat' do
-  command 'sleep 5'
-  action :nothing
+template "#{tomcat['home']}/conf/tomcat-users.xml" do
+  only_if { not node['tomcat']['disabled'] }
+  source "tomcat-users.xml.erb"
+  owner tomcat['user']
+  group tomcat['group']
+  mode 0644
+  variables(
+    :manager => tomcat['manager']
+  )
 end
 
 service 'tomcat' do 
   only_if { not node['tomcat']['disabled'] and not node['tomcat']['service_disabled'] }
-  action [:start, :enable]
+  action :enable
   supports :restart => true, :status => true
-  notifies :run, 'execute[wait for tomcat]', :immediately
   subscribes :restart, "template[#{tomcat['home']}/conf/server.xml]", :delayed
 end
 

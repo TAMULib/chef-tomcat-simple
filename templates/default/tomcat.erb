@@ -1,23 +1,41 @@
-### BEGIN INIT INFO
-# Provides:        tomcat7
-# Required-Start:  $network
-# Required-Stop:   $network
-# Default-Start:   2 3 4 5
-# Default-Stop:    0 1 6
-# Short-Description: Start/Stop Tomcat server
-### END INIT INFO
+#!/bin/bash
+#
+# description: Apache Tomcat init script (Modified for TAMU Libraries needs)
+# processname: tomcat  
+# chkconfig: 234 20 80  
+#
+#
+# Copyright (C) 2014 Miglen Evlogiev
+#
+# This program is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of  MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# Initially forked from: gist.github.com/valotas/1000094
+# Source: gist.github.com/miglen/5590986
 
 #Location of JAVA_HOME (bin files)
-export JAVA_HOME=/usr/java/latest
- 
+export JAVA_HOME=<%=@java_home%>
+
+#Any needed JAVA_OPTS
+export JAVA_OPTS='<%=@x.map{|k,v| '-X'+k+v+' '}.join%>' 
+
 #Add Java binary files to PATH
-export PATH=$JAVA_HOME/bin:<%=@binhome%>
+export PATH=$JAVA_HOME/bin:$PATH
  
 #CATALINA_HOME is the location of the bin files of Tomcat  
-export CATALINA_HOME=<%=@binhome%>  
+export CATALINA_HOME=<%=@tomcat_home%>  
  
 #CATALINA_BASE is the location of the configuration files of this instance of Tomcat
-export CATALINA_BASE=/opt/tomcat7
+export CATALINA_BASE=<%=@tomcat_home%>
  
 #TOMCAT_USER is the default user of tomcat
 export TOMCAT_USER=<%=@tomcat_user%>
@@ -27,8 +45,6 @@ TOMCAT_USAGE="Usage: $0 {\e[00;32mstart\e[00m|\e[00;31mstop\e[00m|\e[00;31mkill\
  
 #SHUTDOWN_WAIT is wait time in seconds for java proccess to stop
 SHUTDOWN_WAIT=20
-
-export JAVA_OPTS='<%=@x.map{|k,v| '-X'+k+v+' '}.join + @xx.map{|k,v| '-XX:'+k+'='+v+' '}.join-%>'
  
 tomcat_pid() {
         echo `ps -fe | grep $CATALINA_BASE | grep -v grep | tr -s " "|cut -d" " -f2`

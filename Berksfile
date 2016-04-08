@@ -1,8 +1,7 @@
-source "https://api.berkshelf.com"
+source "https://supermarket.getchef.com"
 
 metadata
 
-cookbook "ark", "~> 0.8"
+cookbook "ark"
 cookbook "java"
-cookbook 'lib-task', git: 'https://github.com/TAMULib/cookbook-lib-task.git'
-
+cookbook 'lib-task', git: 'https://github.com/TAMULib/cookbook-lib-task.git', branch: '0.3.3'
