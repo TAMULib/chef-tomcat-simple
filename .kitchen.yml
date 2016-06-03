@@ -4,6 +4,7 @@ driver:
 
 provisioner:
   name: chef_solo
+  log_file: "/var/log/chef.log"
 
 platforms:
   - name: centos-6.7

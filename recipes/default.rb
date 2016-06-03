@@ -23,6 +23,10 @@ tomcat_tar = 'apache-tomcat-' + tomcat['version'] + '.tar.gz'
 # Check Tomcat Distribution
 if !(status_ok? URI.join(tomcat['url_base'], url_prefix, tomcat_tar).to_s)
   node.override['tomcat']['url_base'] = "#{node['tomcat']['dist']['alt_uri']}tomcat/"
+  log 'message' do
+    message 'TESTING TOMCAT'
+    level :error
+  end
 end
   
 src = URI.join(tomcat['url_base'], url_prefix, tomcat_tar).to_s
