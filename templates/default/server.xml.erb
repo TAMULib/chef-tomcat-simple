@@ -66,10 +66,21 @@
          APR (HTTP/AJP) Connector: /docs/apr.html
          Define a non-SSL/TLS HTTP/1.1 Connector on port 8080
     -->
-    <Connector port="<%=@port-%>" protocol="HTTP/1.1"
-               maxThreads="<%=@server.key?('maxThreads') ? @server['maxThreads'] : '200' -%>"
-               connectionTimeout="20000"
-               redirectPort="8443" />
+    <Connector port="<%=@port-%>" protocol="HTTP/1.1" scheme="http"
+                connectionTimeout="20000"
+                keepAlivetimeout="60000"
+                maxConnections="5000"
+                redirectPort="8443"
+                maxThreads="<%=@server.key?('maxThreads') ? @server['maxThreads'] : '200' -%>"
+                minSpareThreads="100"
+                acceptorThreadCount="4"
+                acceptCount="2000"
+                URIEncoding="UTF-8"
+                allowTrace="false"
+                xpoweredBy="false"
+                maxHttpHeaderSize="8192"
+                server="undisclosed"
+                maxParameterCount="30000" />
     <!-- A "Connector" using the shared thread pool-->
     <!--
     <Connector executor="tomcatThreadPool"
