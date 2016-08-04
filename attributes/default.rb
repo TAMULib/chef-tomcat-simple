@@ -1,6 +1,6 @@
 default['tomcat']['version'] = '8.0.33'
 default['tomcat']['dist']['uri'] = 'http://aptcache.l/files/apache/'
-default['tomcat']['dist']['alt_uri'] = 'http://archive.apache.org/dist/'
+default['tomcat']['dist']['alt_uri'] = 'http://aptcache.l/files/apache/'
 default['tomcat']['url_base'] = "#{node['tomcat']['dist']['uri']}tomcat/"
 default['tomcat']['port'] = 9000 
 default['tomcat']['uid'] = 91
