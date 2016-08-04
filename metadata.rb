@@ -8,4 +8,4 @@ version          '1.0.1'
 
 depends          'ark', '<=1.0.1'
 depends          'java', '<=1.39.0'
-depends          'lib-task', '0.3.4'
+depends          'lib-task', '0.3.3'
