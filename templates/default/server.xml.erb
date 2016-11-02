@@ -69,6 +69,7 @@
     <Connector port="<%=@port-%>" protocol="HTTP/1.1"
                maxThreads="<%=@server.key?('maxThreads') ? @server['maxThreads'] : '200' -%>"
                connectionTimeout="20000"
+			   <% if @server.key?('URIEncoding') -%>URIEncoding="<%=@server['URIEncoding']-%>"<% end -%>
                redirectPort="8443" />
     <!-- A "Connector" using the shared thread pool-->
     <!--
