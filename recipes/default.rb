@@ -67,6 +67,7 @@ ark 'tomcat' do
   action :put
   retries 3
   notifies :run, "ruby_block[set-init]", :immediately
+  not_if { ::File.directory?(dest) }
 end
 
 directory File.join(dest, tomcat['cache']['dir']) do
